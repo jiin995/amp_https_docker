@@ -2,7 +2,11 @@ version: "3"
 
 services:
   web:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args: 
+        - PHP_IMAGE_TAG=${PHP_VERSION}-apache
     restart: 'always'
     depends_on:
       - mariadb

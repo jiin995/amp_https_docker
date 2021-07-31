@@ -1,4 +1,6 @@
-FROM php:${PHP_VERSION}-apache
+ARG PHP_IMAGE_TAG
+
+FROM php:${PHP_IMAGE_TAG}
 
 RUN apt update && apt install -y zip libzip-dev libpng-dev libicu-dev libxml2-dev cron
 RUN docker-php-ext-install mysqli zip gd intl soap
