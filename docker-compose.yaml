@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  web:
+    build: .
+    restart: 'always'
+    depends_on:
+      - mariadb
+    restart: 'always'
+    ports:
+      - '${HTTPS_PUB_PORT}:443'
+    links:
+      - mariadb
+    volumes:
+      - "./data/www:/var/www/html/"
+      - "./apache/php.ini:/usr/local/etc/php/php.ini"
+      - "./apache/000-default.conf:/etc/apache2/sites-enabled/000-default.conf"
+      - "${SSL_FULLCHAIN_PATH}:/etc/apache2/fullchain.pem"
+      - "${SSL_PRIVKEY_PATH}:/etc/apache2/privkey.pem"
+  mariadb:
+    image: "mariadb:${MARIADB_VERSION}"
+    restart: 'always'
+    volumes: 
+      - "./data/mariadb/data:/var/lib/mysql/"
+      - "./data/mariadb/logs:/var/log/mysql/"
+      - "./data/mariadb/conf:/etc/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
